@@ -23,17 +23,13 @@ img :
 
 run :
 	../z_tools/make.exe img
-	copy helloos.img ..\z_tools\qemu\fdimage0.bin
-	../z_tools/make.exe -C ../z_tools/qemu
-
-install :
-	../z_tools/make.exe img
-	../z_tools/imgtol.com w a: helloos.img
+	qemu-system-i386 -m 16M -fda helloos.img -boot a -nographic -serial mon:stdio
 
 clean :
-	-del ipl.bin
-	-del ipl.lst
+	-rm ipl.bin
+	-rm ipl.lst
+	-rm helloos.img
 
 src_only :
 	../z_tools/make.exe clean
-	-del helloos.img
+	-rm helloos.img

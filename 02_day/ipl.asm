@@ -48,34 +48,19 @@ MOV ES, AX             ; 设置扩展段寄存器(ES)=0 8e c0
 MOV SI, MSG            ; SI指向字符串地址(0x7C74) 8e 74 7c
 
 PRINT_LOOP:
+;MOV AL, [SI]          ; AL=字符串首字节 8a 04
+;ADD SI, 1             ; SI指针递增 83 c6 01
 LODSB                  ; 加载SI指向的字节到AL，SI指针递增
-;MOV AL, [SI]           ; AL=字符串首字节 8a 04
-;ADD SI, 1              ; SI指针递增 83 c6 01
 CMP AL, 0              ; 检查字符串结束符 3c 00
-JE HALT                ; 如果为0则跳转到HLT
+JE  HALT               ; 如果为0则跳转到HLT
 MOV AH, 0x0e           ; BIOS显示功能号 b4 0e
 MOV BX, 0x000F         ; 显示属性(黑底白字) bb 0f 00
 INT 0x10               ; 调用BIOS显示中断 cd 10
 JMP PRINT_LOOP         ; 跳回继续处理下一个字符 eb ee
 
 HALT:
-HLT                    ; 停止CPU执行 F4
-JMP 0x0021             ; 无限循环(HLT) eb fd
-
-; 显示字符串
-;MOV SI, MSG      ; SI指向消息地址
-;PRINT_LOOP:
-;LODSB            ; 加载SI指向的字节到AL
-;CMP AL, 0        ; 检查字符串结束
-;JE HALT
-;MOV AH, 0X0E     ; BIOS视频中断功能号
-;MOV BX, 0X000F   ; 显示属性(黑底白字)
-;INT 0X10         ; 调用BIOS中断
-;JMP PRINT_LOOP
-
-;HALT:
-;HLT              ; 停止CPU
-;JMP HALT         ; 无限循环
+HLT                    ; 停止CPU执行
+JMP HALT               ; 无限循环(HLT)
 
 ; 数据区
 MSG:
@@ -85,20 +70,7 @@ DB 0x0a          ; 换行
 DB 0             ; 字符串结束符
 
 ; 填充到510字节
-TIMES 0x1fe-($-$$) DB 0 ; 当前地址-其实地址小于510时填充0
+TIMES 0x1fe-($-$$) DB 0 ; 当前地址-起始地址小于510时填充0
 
 ; 引导扇区标志
 DB 0x55, 0xaa
-
-;-----------------------------
-; 后续扇区填充(FAT区域模拟)
-;-----------------------------
-; 第一个FAT表(必需)
-FAT1:
-DB 0xf0, 0xff, 0xff, 0x00
-TIMES 4600-($-FAT1) DB 0
-
-; 第二个FAT表(可选)
-FAT2:
-DB 0xf0, 0xff, 0xff, 0x00
-TIMES 1469432-($-FAT2) DB 0
