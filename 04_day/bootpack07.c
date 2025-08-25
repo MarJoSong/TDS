@@ -23,26 +23,13 @@ void io_out8(int port, int data);
 
 void HariMain(void)
 {
-	char* vram = (char*)0xa0000;
-	int xsize = 320, ysize = 200;
+	int i;
+	char* p = (char*)0xa0000;
 
 	init_palette();
-	box_fill8(vram, xsize, COL8_008484,  0,     0,          xsize - 1, ysize - 29);
-	box_fill8(vram, xsize, COL8_C6C6C6,  0,     ysize - 28, xsize - 1, ysize - 28);
-	box_fill8(vram, xsize, COL8_FFFFFF,  0,     ysize - 27, xsize - 1, ysize - 27);
-	box_fill8(vram, xsize, COL8_C6C6C6,  0,     ysize - 26, xsize - 1, ysize - 1);
-
-	box_fill8(vram, xsize, COL8_FFFFFF,  3,     ysize - 24, 59,         ysize - 24);
-	box_fill8(vram, xsize, COL8_FFFFFF,  2,     ysize - 24,  2,         ysize - 4);
-	box_fill8(vram, xsize, COL8_848484,  3,     ysize -  4, 59,         ysize - 4);
-	box_fill8(vram, xsize, COL8_848484, 59,     ysize - 23, 59,         ysize - 5);
-	box_fill8(vram, xsize, COL8_000000,  2,     ysize -  3, 59,         ysize - 3);
-	box_fill8(vram, xsize, COL8_000000, 60,     ysize - 24, 60,         ysize - 3);
-
-	box_fill8(vram, xsize, COL8_848484,  xsize - 47,      ysize - 24,          xsize -  4, ysize - 24);
-	box_fill8(vram, xsize, COL8_848484,  xsize - 47,      ysize - 24,          xsize - 47, ysize -  4);
-	box_fill8(vram, xsize, COL8_FFFFFF,  xsize - 47,      ysize -  3,          xsize -  4, ysize -  3);
-	box_fill8(vram, xsize, COL8_FFFFFF,  xsize -  3,      ysize - 24,          xsize -  3, ysize -  3);
+	box_fill8(p, 320, COL8_FF0000, 20, 20, 120, 120);
+	box_fill8(p, 320, COL8_00FF00, 70, 50, 170, 150);
+	box_fill8(p, 320, COL8_0000FF, 120, 80, 220, 180);
 
 	for (;;) {
 		io_hlt();
